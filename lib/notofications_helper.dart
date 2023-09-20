@@ -110,15 +110,16 @@ class NotificationsHelper{
         priority: Priority.high,
         ticker: 'ticker',
         sound: const RawResourceAndroidNotificationSound('alert'),
-       playSound: true
+        playSound: true
      );
-        NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
+
+    NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
 
   /***
    *
    *
    *
-   */
+   ***/
     AndroidInitializationSettings initializationSettingsAndroid =
     const AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -155,7 +156,7 @@ class NotificationsHelper{
      *
      */
     await flutterLocalNotificationsPlugin.show(
-        id++, 'plain title', 'plain body', notificationDetails,
+        id++, 'shaimaa', 'shaimaa---', notificationDetails,
         payload: 'item x');
   }
 }

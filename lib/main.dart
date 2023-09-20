@@ -9,10 +9,9 @@ import 'notofications_helper.dart';
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  FirebaseMessaging.instance.getToken().then((value) => print("shaimaaToken : ${value}"));
+  // FirebaseMessaging.instance.getToken().then((value) => print("shaimaaToken : ${value}"));
   // Set the background messaging handler early on, as a named top-level function
- FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  runApp(const MyApp());
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 }
 
 @pragma('vm:entry-point')
@@ -55,6 +54,14 @@ class _MyHomePageState extends State<MyHomePage> {
     NotificationsHelper().requestPermissions();
     NotificationsHelper().isAndroidPermissionGranted();
     NotificationsHelper().InIt();
+
+    //...
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async{
+      print('A new onMessageOpenedApp event was published!');
+      await Firebase.initializeApp();
+       NotificationsHelper().InIt();
+       NotificationsHelper().showNotification(message);
+    });
 
     super.initState();
   }
