@@ -16,36 +16,32 @@ class NotificationsHelper{
   int id = 0;
 
 
-   Future<void> InIt() async{
-     AndroidInitializationSettings initializationSettingsAndroid =
-     const AndroidInitializationSettings('@mipmap/ic_launcher');
+   Future<void> setupFlutterNotifications() async {
+     // AndroidNotificationChannel channel = const AndroidNotificationChannel(
+     //   'high_importance_channel', // id
+     //   'High Importance Notifications', // title
+     //   description:
+     //   'This channel is used for important notifications.', // description
+     //   importance: Importance.high,
+     // );
+     //
+     // flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+     //
+     // /// Create an Android Notification Channel.
+     // ///
+     // /// We use this channel in the `AndroidManifest.xml` file to override the
+     // /// default FCM channel to enable heads up notifications.
+     // await flutterLocalNotificationsPlugin
+     //     .resolvePlatformSpecificImplementation<
+     //     AndroidFlutterLocalNotificationsPlugin>()
+     //     ?.createNotificationChannel(channel);
 
-     final DarwinInitializationSettings initializationSettingsDarwin =
-     DarwinInitializationSettings(
-       requestAlertPermission: false,
-       requestBadgePermission: false,
-       requestSoundPermission: false,
-       onDidReceiveLocalNotification:
-           (int id, String? title, String? body, String? payload) async {
-       },
-     );
-
-     InitializationSettings initializationSettings = InitializationSettings(
-       android: initializationSettingsAndroid,
-       iOS: initializationSettingsDarwin,
-     );
-     await flutterLocalNotificationsPlugin.initialize(
-       initializationSettings,
-       onDidReceiveNotificationResponse:
-           (NotificationResponse notificationResponse) {
-         switch (notificationResponse.notificationResponseType) {
-           case NotificationResponseType.selectedNotification:
-             break;
-           case NotificationResponseType.selectedNotificationAction:
-             break;
-         }
-       },
-       //onDidReceiveBackgroundNotificationResponse: (_){},
+     /// Update the iOS foreground notification presentation options to allow
+     /// heads up notifications.
+     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+       alert: true,
+       badge: true,
+       sound: false,
      );
    }
 
@@ -95,7 +91,7 @@ class NotificationsHelper{
       'desc${Random().nextInt(1000)}', // Channel name
       importance: Importance.high,
        sound: const RawResourceAndroidNotificationSound('alert'),
-       playSound: true// Importance level (high, medium, low)
+      // playSound: true// Importance level (high, medium, low)
     );
 
     await flutterLocalNotificationsPlugin
@@ -110,7 +106,7 @@ class NotificationsHelper{
         priority: Priority.high,
         ticker: 'ticker',
         sound: const RawResourceAndroidNotificationSound('alert'),
-        playSound: true
+        //playSound: true
      );
 
     NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
@@ -156,7 +152,7 @@ class NotificationsHelper{
      *
      */
     await flutterLocalNotificationsPlugin.show(
-        id++, 'shaimaa', 'shaimaa---', notificationDetails,
+        id++, remoteMessage?.data["title"] , remoteMessage?.data["body"], notificationDetails,
         payload: 'item x');
   }
 }
