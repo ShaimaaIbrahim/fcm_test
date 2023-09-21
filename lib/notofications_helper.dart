@@ -73,7 +73,7 @@ class NotificationsHelper{
     }
   }
 
-  Future<void> showNotification(RemoteMessage? remoteMessage) async{
+  Future<void> showLocalNotification(RemoteMessage? remoteMessage) async{
     print("shaimaa: showNotification");
      AndroidNotificationChannel androidChannel = AndroidNotificationChannel(
       '${Random().nextInt(1000)}', // Unique channel ID
