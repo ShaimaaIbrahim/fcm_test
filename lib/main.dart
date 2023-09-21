@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
       print('A new onMessageOpenedApp event was published!');
       await Firebase.initializeApp();
       NotificationsHelper().setupFlutterNotifications();
-      //NotificationsHelper().showNotification(message);
+      NotificationsHelper().showLocalNotification(message);
     });
 
     super.initState();

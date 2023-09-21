@@ -20,9 +20,9 @@ class NotificationsHelper{
      // /// Update the iOS foreground notification presentation options to allow
      // /// heads up notifications.
      await FirebaseMessaging.instance.requestPermission(
-       alert: false,
-       announcement: false,
-       badge: false,
+       alert: true,
+       announcement: true,
+       badge: true,
        carPlay: false,
        criticalAlert: false,
        provisional: false,
@@ -31,7 +31,7 @@ class NotificationsHelper{
      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
        alert: true,
        badge: true,
-       sound: false,
+       sound: true,
      );
    }
 
@@ -42,7 +42,6 @@ class NotificationsHelper{
           AndroidFlutterLocalNotificationsPlugin>()
           ?.areNotificationsEnabled() ??
           false;
-
     }
   }
 
@@ -74,7 +73,6 @@ class NotificationsHelper{
   }
 
   Future<void> showLocalNotification(RemoteMessage? remoteMessage) async{
-    print("shaimaa: showNotification");
      AndroidNotificationChannel androidChannel = AndroidNotificationChannel(
       '${Random().nextInt(1000)}', // Unique channel ID
       'desc${Random().nextInt(1000)}', // Channel name
@@ -104,6 +102,7 @@ class NotificationsHelper{
         importance: Importance.max,
         priority: Priority.high,
         ticker: 'ticker',
+        icon: "@drawable/ic_task",
         sound: const RawResourceAndroidNotificationSound("alert"),
         //playSound: true
      );
@@ -111,7 +110,7 @@ class NotificationsHelper{
     NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
 
     AndroidInitializationSettings initializationSettingsAndroid =
-    const AndroidInitializationSettings('@mipmap/ic_launcher');
+    const AndroidInitializationSettings('@drawable/ic_task');
 
     final DarwinInitializationSettings initializationSettingsDarwin =
     DarwinInitializationSettings(
@@ -138,15 +137,9 @@ class NotificationsHelper{
             break;
         }
       },
-      //onDidReceiveBackgroundNotificationResponse: (_){},
     );
-    /**
-     *
-     *
-     *
-     */
     await flutterLocalNotificationsPlugin.show(
-        id++, remoteMessage?.data["title"] , remoteMessage?.data["body"], notificationDetails,
+        id++, remoteMessage?.notification?.title, remoteMessage?.notification?.body, notificationDetails,
         payload: 'item x');
   }
 }
