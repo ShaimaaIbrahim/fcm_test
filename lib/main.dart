@@ -11,7 +11,7 @@ Future<void> main() async{
    await Firebase.initializeApp();
    FirebaseMessaging.instance.getToken().then((value) => print("shaimaaToken : ${value}"));
   // Set the background messaging handler early on, as a named top-level function
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
  runApp(MyApp());
 }
 
@@ -20,7 +20,7 @@ Future<void> main() async{
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   await NotificationsHelper().setupFlutterNotifications();
-  await NotificationsHelper().showNotification(message);
+  //await NotificationsHelper().showNotification(message);
 }
 
 class MyApp extends StatelessWidget {
@@ -62,14 +62,14 @@ class _MyHomePageState extends State<MyHomePage> {
       print('A new onMessageOpenedApp event was published!');
        await Firebase.initializeApp();
        NotificationsHelper().setupFlutterNotifications();
-       NotificationsHelper().showNotification(message);
+       //NotificationsHelper().showNotification(message);
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async{
       print('A new onMessageOpenedApp event was published!');
       await Firebase.initializeApp();
       NotificationsHelper().setupFlutterNotifications();
-      NotificationsHelper().showNotification(message);
+      //NotificationsHelper().showNotification(message);
     });
 
     super.initState();
@@ -87,7 +87,8 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 50),
             ElevatedButton(
               child: const Text('Run Heavy Task'),
-              onPressed: () => NotificationsHelper().showNotification(null),
+              onPressed: (){},
+              //onPressed: () => NotificationsHelper().showNotification(null),
             ),
           ],
         ),

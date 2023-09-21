@@ -17,27 +17,17 @@ class NotificationsHelper{
 
 
    Future<void> setupFlutterNotifications() async {
-     // AndroidNotificationChannel channel = const AndroidNotificationChannel(
-     //   'high_importance_channel', // id
-     //   'High Importance Notifications', // title
-     //   description:
-     //   'This channel is used for important notifications.', // description
-     //   importance: Importance.high,
-     // );
-     //
-     // flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-     //
-     // /// Create an Android Notification Channel.
-     // ///
-     // /// We use this channel in the `AndroidManifest.xml` file to override the
-     // /// default FCM channel to enable heads up notifications.
-     // await flutterLocalNotificationsPlugin
-     //     .resolvePlatformSpecificImplementation<
-     //     AndroidFlutterLocalNotificationsPlugin>()
-     //     ?.createNotificationChannel(channel);
-
-     /// Update the iOS foreground notification presentation options to allow
-     /// heads up notifications.
+     // /// Update the iOS foreground notification presentation options to allow
+     // /// heads up notifications.
+     await FirebaseMessaging.instance.requestPermission(
+       alert: false,
+       announcement: false,
+       badge: false,
+       carPlay: false,
+       criticalAlert: false,
+       provisional: false,
+       sound: true,
+     );
      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
        alert: true,
        badge: true,
@@ -85,17 +75,26 @@ class NotificationsHelper{
 
   Future<void> showNotification(RemoteMessage? remoteMessage) async{
     print("shaimaa: showNotification");
-
      AndroidNotificationChannel androidChannel = AndroidNotificationChannel(
       '${Random().nextInt(1000)}', // Unique channel ID
       'desc${Random().nextInt(1000)}', // Channel name
       importance: Importance.high,
        sound: const RawResourceAndroidNotificationSound('alert'),
-      // playSound: true// Importance level (high, medium, low)
+      playSound: true// Importance level (high, medium, low)
     );
 
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(androidChannel);
+
+
+    /// Create an Android Notification Channel.
+    ///
+    /// We use this channel in the `AndroidManifest.xml` file to override the
+    /// default FCM channel to enable heads up notifications.
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(androidChannel);
 
      AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
@@ -105,17 +104,12 @@ class NotificationsHelper{
         importance: Importance.max,
         priority: Priority.high,
         ticker: 'ticker',
-        sound: const RawResourceAndroidNotificationSound('alert'),
+        sound: const RawResourceAndroidNotificationSound("alert"),
         //playSound: true
      );
 
     NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails);
 
-  /***
-   *
-   *
-   *
-   ***/
     AndroidInitializationSettings initializationSettingsAndroid =
     const AndroidInitializationSettings('@mipmap/ic_launcher');
 
